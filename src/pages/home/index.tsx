@@ -5,12 +5,12 @@ import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import TechImage from "../../assets/hero-images/tech-image.svg";
-import useSocket from "../../services/notification.service";
+// import useSocket from "../../services/notification.service";
 
 export const Home = () => {
   const { loginWithRedirect, isAuthenticated } = useAuth0();
 
-  const { notifications } = useSocket();
+  // const { notifications } = useSocket();
 
   return (
     <div className="home-container">
@@ -47,13 +47,13 @@ export const Home = () => {
             <img src={HeroImage} alt="home-hero" />
           </div>
         </header>
-        <div>
+        {/* <div>
           <ul>
             {notifications.map((note, index) => (
               <li key={index}>{note}</li>
             ))}
           </ul>
-        </div>
+        </div> */}
         <div className="home-container__tech">
           <div className="home-container__tech-image">
             <img src={TechImage} alt="Tech Image" />
