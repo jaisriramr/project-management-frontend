@@ -1,0 +1,110 @@
+.home-container {
+  .home-navbar {
+    height: 60px;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 100px;
+    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+    .home-navbar__links {
+      display: flex;
+      align-items: center;
+      column-gap: 36px;
+      img {
+        height: 36px;
+        width: 100%;
+      }
+      .home-navbar__link {
+        font-size: 18px;
+        font-weight: 500;
+        color: #333333;
+        text-decoration: none;
+      }
+    }
+    .home-navbar__auth-group {
+      display: flex;
+      align-items: center;
+      column-gap: 20px;
+    }
+  }
+
+  .home-container__body {
+    min-height: calc(100vh - 42px - 60px);
+    .home-container__header {
+      height: 660px;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #6473ff;
+      padding: 0 140px;
+      .home-container__header-hero-text {
+        width: 50%;
+
+        h1 {
+          font-size: 46px;
+          font-weight: 600;
+          color: #fff;
+          margin-bottom: 16px;
+        }
+        p {
+          color: #f4f4f4;
+          font-weight: 400;
+          font-size: 18px;
+          line-height: 160%;
+        }
+      }
+      .home-container__header-hero-image {
+        width: 50%;
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+
+  .home-container__tech {
+    display: flex;
+    align-items: center;
+    column-gap: 100px;
+    padding: 100px 200px;
+    .home-container__tech-text {
+      width: 50%;
+      h2 {
+        font-size: 42px;
+        margin-bottom: 16px;
+        color: #333333;
+      }
+      p {
+        font-size: 16px;
+        color: #777;
+        line-height: 160%;
+      }
+    }
+    .home-container__tech-image {
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        height: 80%;
+        width: 80%;
+        object-fit: contain;
+      }
+    }
+  }
+
+  footer {
+    border-top: 1px solid #ddd;
+    height: 42px;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
