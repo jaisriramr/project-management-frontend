@@ -2,7 +2,7 @@ import "./index.scss";
 import Logo from "../../assets/logo.svg";
 import HeroImage from "../../assets/hero-images/hero-image.png";
 import { Button } from "antd";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import TechImage from "../../assets/hero-images/tech-image.svg";
 import { useEffect } from "react";
@@ -14,17 +14,15 @@ export const Home = () => {
   // const { notifications } = useSocket();
   const url = window.location.href;
 
-  const inviteMatches = url.match(/invitation=([^&]+)/);
-  const orgMatches = url.match(/organization=([^&]+)/);
-
-  const { invitation, organization } = useParams();
+  const inviteMatches: any = url.match(/invitation=([^&]+)/);
+  const orgMatches: any = url.match(/organization=([^&]+)/);
 
   useEffect(() => {
     console.log(
       "INNNV ",
 
-      invitation,
-      organization
+      inviteMatches[1],
+      orgMatches[1]
     );
   }, []);
 
@@ -49,6 +47,7 @@ export const Home = () => {
           )}
           {!isAuthenticated && orgMatches && inviteMatches && (
             <>
+              <>inv</>
               <Button
                 size="middle"
                 onClick={() =>
