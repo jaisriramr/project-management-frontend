@@ -5,7 +5,6 @@ import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import TechImage from "../../assets/hero-images/tech-image.svg";
-import { useEffect } from "react";
 // import useSocket from "../../services/notification.service";
 
 export const Home = () => {
