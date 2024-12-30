@@ -20,7 +20,7 @@ function App() {
       domain={import.meta.env.VITE_AUTH0_DOMAIN}
       clientId={import.meta.env.VITE_AUTH0_CLIENT}
       authorizationParams={{
-        redirect_uri: import.meta.env.VITE_BASE_URL,
+        redirect_uri: import.meta.env.VITE_BASE_URL + "/dashboard",
         audience: import.meta.env.VITE_AUTH0_AUDIENCE,
       }}
     >
