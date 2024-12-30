@@ -1,0 +1,97 @@
+.dashboard-nav__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  width: 100vw;
+  height: 60px;
+  border-bottom: 1px solid #eeeeee;
+
+  hr {
+  }
+
+  .dashboard-nav__logo {
+    height: 32px;
+    width: auto;
+    cursor: pointer;
+  }
+
+  .dashboard-nav__links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    column-gap: 20px;
+  }
+
+  .dashboard-nav__user-profile {
+    height: 32px;
+    width: auto;
+    border-radius: 100px;
+    cursor: pointer;
+  }
+
+  .dashboard-nav__user-dropdown {
+    position: absolute;
+    right: 40px;
+    top: 60px;
+    background: white;
+    box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    width: 280px;
+
+    .dashboard-nav__user-link {
+      cursor: pointer;
+      padding: 10px 20px;
+    }
+
+    .dashboard-nav__divider {
+      height: 1px;
+      background: #f4f4f4;
+    }
+
+    .dashboard-nav__user-logout {
+      cursor: pointer;
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+
+    .dashboard-nav__user-account {
+      padding: 20px;
+
+      label: {
+        font-size: 12px;
+        font-weight: 500;
+        color: #999999;
+      }
+
+      .dashboard-nav__user-card {
+        padding: 20px 0 0 0;
+        display: flex;
+        align-items: center;
+        column-gap: 20px;
+
+        .dashboard-nav__user-card-pic {
+          height: 42px;
+          width: auto;
+          border-radius: 100px;
+        }
+
+        .dashboard-nav__user-card-row {
+          h6 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333333;
+            margin-bottom: 5px;
+            text-transform: capitalize;
+          }
+
+          p {
+            font-size: 12px;
+            font-weight: 400;
+            color: #999999;
+          }
+        }
+      }
+    }
+  }
+}
