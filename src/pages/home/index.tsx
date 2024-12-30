@@ -17,15 +17,6 @@ export const Home = () => {
   const inviteMatches: any = url.match(/invitation=([^&]+)/);
   const orgMatches: any = url.match(/organization=([^&]+)/);
 
-  useEffect(() => {
-    console.log(
-      "INNNV ",
-
-      inviteMatches[1],
-      orgMatches[1]
-    );
-  }, []);
-
   return (
     <div className="home-container">
       <nav className="home-navbar">
