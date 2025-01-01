@@ -6,8 +6,13 @@
   width: 100vw;
   height: 60px;
   border-bottom: 1px solid #eeeeee;
-
-  hr {
+  .dashboard-nav__small-svg {
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5px;
+    width: auto;
   }
 
   .dashboard-nav__logo {

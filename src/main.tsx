@@ -3,9 +3,11 @@ import { createRoot } from "react-dom/client";
 import "./index.scss";
 import "reflect-metadata";
 import App from "./App.tsx";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  <QueryClientProvider client={queryClient}>
     <App />
-  </StrictMode>
+  </QueryClientProvider>
 );
