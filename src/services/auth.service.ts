@@ -14,4 +14,22 @@ export class AuthService {
   getUserByEmail = async (email: string) => {
     return await this.publicHttpService.get(`${this.namespace}/email/${email}`);
   };
+
+  getMembersOfOrg = async (org_id: string) => {
+    return await this.publicHttpService.get(`${this.namespace}/orgs/${org_id}`);
+  };
+
+  loginUser = async (userData: any) => {
+    return await this.publicHttpService.post(
+      `${this.namespace}/login`,
+      userData
+    );
+  };
+
+  registerUser = async (userData: any) => {
+    return await this.publicHttpService.post(
+      `${this.namespace}/register`,
+      userData
+    );
+  };
 }

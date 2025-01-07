@@ -5,12 +5,14 @@ import { useEffect, useState } from "react";
 import Bell from "../../assets/bell.svg";
 import { Col, Dropdown, MenuProps, Row } from "antd";
 import DropdownIcon from "../../assets/angle-down.svg";
-import { useAuth0 } from "@auth0/auth0-react";
+import * as jwtDecode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 export const DashboardNav = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<any>();
   const [profilePic, setProfilePic] = useState<any>();
-  const { logout } = useAuth0();
+
   const [dropdown, setDropdown] = useState<boolean>(false);
 
   useEffect(() => {
@@ -21,14 +23,15 @@ export const DashboardNav = () => {
       }
     });
 
-    if (localStorage.getItem("user")) {
-      const user = JSON.parse(localStorage.getItem("user") || "");
-      const picture = JSON.stringify(user.picture)
-        .replace('"', "")
-        .replace('"', "");
-
-      setProfilePic(picture);
-      setUser(user);
+    if (localStorage.getItem("access_token")) {
+      const decoded: any = jwtDecode.jwtDecode(
+        localStorage.getItem("access_token") || ""
+      );
+      console.log(decoded);
+      if (decoded?.picture) {
+        setProfilePic(decoded?.picture);
+      }
+      setUser(decoded);
     }
   }, []);
 
@@ -43,13 +46,18 @@ export const DashboardNav = () => {
     }
   }, [dropdown]);
 
+  function handleLogout() {
+    localStorage.removeItem("access_token");
+    navigate("/");
+  }
+
   const navDropdown = () => {
     return (
       <div className="dashboard-nav__id dashboard-nav__user-dropdown">
         <div className="dashboard-nav__id dashboard-nav__user-account">
           <label className="dashboard-nav__id">Account</label>
           <div className="dashboard-nav__id dashboard-nav__user-card">
-            {profilePic && (
+            {profilePic ? (
               <>
                 <img
                   src={profilePic}
@@ -58,9 +66,13 @@ export const DashboardNav = () => {
                   loading="lazy"
                 />
               </>
+            ) : (
+              <div className="dashboard-nav__user-pic">
+                {String(user?.name).slice(0, 2).toUpperCase()}
+              </div>
             )}
             <div className="dashboard-nav__id dashboard-nav__user-card-row">
-              <h6 className="dashboard-nav__id">{user?.nickname}</h6>
+              <h6 className="dashboard-nav__id">{user?.name}</h6>
               <p className="dashboard-nav__id">{user?.email}</p>
             </div>
           </div>
@@ -75,7 +87,7 @@ export const DashboardNav = () => {
         <div className="dashboard-nav__id dashboard-nav__divider"></div>
         <div
           className="dashboard-nav__id dashboard-nav__user-logout"
-          onClick={() => logout()}
+          onClick={() => handleLogout()}
         >
           <span className="dashboard-nav__id">Log out</span>
         </div>
@@ -113,16 +125,23 @@ export const DashboardNav = () => {
           <img src={Bell} alt="bell" className="dashboard-nav__bell" />
         </li>
         <li className="dashboard-nav-link">
-          {profilePic && (
+          {profilePic ? (
             <>
               <img
-                src={profilePic}
                 onClick={() => setDropdown(!dropdown)}
+                src={profilePic}
                 alt="user"
+                className="dashboard-nav__id dashboard-nav__user-card-pic"
                 loading="lazy"
-                className="dashboard-nav__user-profile"
               />
             </>
+          ) : (
+            <div
+              className="dashboard-nav__user-pic"
+              onClick={() => setDropdown(!dropdown)}
+            >
+              {String(user?.name).slice(0, 2).toUpperCase()}
+            </div>
           )}
           {navDropdown()}
         </li>

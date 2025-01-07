@@ -6,6 +6,17 @@
   width: 100vw;
   height: 60px;
   border-bottom: 1px solid #eeeeee;
+  .dashboard-nav__user-pic {
+    height: 32px;
+    width: 32px;
+    border-radius: 50px;
+    background-color: #857aff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
   .dashboard-nav__small-svg {
     height: 16px;
     display: flex;

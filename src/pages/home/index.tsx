@@ -3,13 +3,10 @@ import Logo from "../../assets/logo.svg";
 import HeroImage from "../../assets/hero-images/hero-image.png";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 import TechImage from "../../assets/hero-images/tech-image.svg";
 // import useSocket from "../../services/notification.service";
 
 export const Home = () => {
-  const { loginWithRedirect, isAuthenticated } = useAuth0();
-
   // const { notifications } = useSocket();
   const url = window.location.href;
 
@@ -28,31 +25,9 @@ export const Home = () => {
           </Link>
         </div>
         <div className="home-navbar__auth-group">
-          {!isAuthenticated && !orgMatches && !inviteMatches && (
-            <>
-              <Button size="middle" onClick={() => loginWithRedirect()}>
-                Login
-              </Button>
-            </>
-          )}
-          {!isAuthenticated && orgMatches && inviteMatches && (
-            <>
-              <>inv</>
-              <Button
-                size="middle"
-                onClick={() =>
-                  loginWithRedirect({
-                    authorizationParams: {
-                      organization: orgMatches[1],
-                      invitation: inviteMatches[1],
-                    },
-                  })
-                }
-              >
-                Login
-              </Button>
-            </>
-          )}
+          <Link to="/login">
+            <Button size="middle">Login</Button>
+          </Link>
         </div>
       </nav>
       <main className="home-container__body">

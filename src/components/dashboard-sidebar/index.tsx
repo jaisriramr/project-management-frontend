@@ -1,9 +1,16 @@
 import "./index.scss";
 import SoftwareProjectIcon from "../../assets/software-project.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const DashboardSidebar = () => {
-  const [activeMenu, setActiveMenu] = useState("");
+  const [activeMenu, setActiveMenu] = useState("board");
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setActiveMenu(location.pathname);
+  }, []);
 
   return (
     <div className="dashboard-sidebar__container">
@@ -17,10 +24,11 @@ const DashboardSidebar = () => {
 
       <div className="dashboard-sidebar__project-links">
         <h4>PLANNING</h4>
-        <div
-          onClick={() => setActiveMenu("summary")}
+        <Link
+          to="/dashboard/summary"
+          onClick={() => setActiveMenu("/dashboard/summary")}
           className={
-            activeMenu !== "summary"
+            activeMenu !== "/dashboard/summary"
               ? "dashboard-sidebar__project-link"
               : "dashboard-sidebar__project-link dashboard-sidebar__project-link-active"
           }
@@ -39,11 +47,12 @@ const DashboardSidebar = () => {
             ></path>
           </svg>
           <span>Summary</span>
-        </div>
-        <div
-          onClick={() => setActiveMenu("backlog")}
+        </Link>
+        <Link
+          to="/dashboard/backlog"
+          onClick={() => setActiveMenu("/dashboard/backlog")}
           className={
-            activeMenu !== "backlog"
+            activeMenu !== "/dashboard/backlog"
               ? "dashboard-sidebar__project-link"
               : "dashboard-sidebar__project-link dashboard-sidebar__project-link-active"
           }
@@ -57,11 +66,13 @@ const DashboardSidebar = () => {
             </g>
           </svg>
           <span>Backlog</span>
-        </div>
-        <div
-          onClick={() => setActiveMenu("board")}
+          {/* </div> */}
+        </Link>
+        <Link
+          to="/dashboard/board"
+          onClick={() => setActiveMenu("/dashboard/board")}
           className={
-            activeMenu !== "board"
+            activeMenu !== "/dashboard/board"
               ? "dashboard-sidebar__project-link"
               : "dashboard-sidebar__project-link dashboard-sidebar__project-link-active"
           }
@@ -73,11 +84,12 @@ const DashboardSidebar = () => {
             </g>
           </svg>
           <span>Board</span>
-        </div>
-        <div
-          onClick={() => setActiveMenu("list")}
+        </Link>
+        <Link
+          to="/dashboard/list"
+          onClick={() => setActiveMenu("/dashboard/list")}
           className={
-            activeMenu !== "list"
+            activeMenu !== "/dashboard/list"
               ? "dashboard-sidebar__project-link"
               : "dashboard-sidebar__project-link dashboard-sidebar__project-link-active"
           }
@@ -93,7 +105,7 @@ const DashboardSidebar = () => {
             </g>
           </svg>
           <span>List</span>
-        </div>
+        </Link>
       </div>
     </div>
   );

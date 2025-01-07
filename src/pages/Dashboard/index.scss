@@ -1,4 +1,31 @@
 .dashboard-page {
   height: 100vh;
   width: 100vw;
+
+  .dashboard-main {
+    display: flex;
+    .dashboard-main-board {
+      padding: 40px;
+      width: calc(100vw - 240px);
+
+      .dashboard-main__board-nav {
+        display: flex;
+        align-items: center;
+        column-gap: 10px;
+        a {
+          color: #333333;
+          text-decoration: none;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+      }
+      .dashboard-main__board-nav-title {
+        font-size: 24px;
+        font-weight: 500;
+        color: #333333;
+        padding-top: 8px;
+      }
+    }
+  }
 }

@@ -1,0 +1,102 @@
+.auth-container {
+  max-width: 1470px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  .auth-fp {
+    font-size: 12px;
+    color: red;
+    text-decoration: none;
+  }
+  .auth-container_password-error {
+    padding-top: 10px;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    padding-left: 10px;
+    color: red;
+  }
+  .auth-container__hero {
+    width: 50%;
+    height: 100vh;
+    background-color: #6473ff;
+    padding: 100px 50px;
+    h1 {
+      font-size: 42px;
+      font-weight: 600;
+      color: #ffffff;
+      padding-bottom: 20px;
+    }
+    p {
+      font-size: 18px;
+      font-weight: 400;
+      color: #f4f4f4;
+      line-height: 160%;
+      padding-bottom: 20px;
+    }
+    .auth-container__hero-image-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        width: 80%;
+        object-fit: contain;
+      }
+    }
+  }
+  .auth-container__form-container {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px;
+    .auth-container__form {
+      width: 60%;
+      .auth-container__form-input {
+        width: 100%;
+        height: 42px;
+        margin-top: 5px;
+      }
+      .auth-container__form-group {
+        margin-bottom: 20px;
+        position: relative;
+        .auth-invalid {
+          padding-top: 5px;
+          padding-bottom: 0 !important;
+          margin-bottom: 0 !important;
+          color: red;
+        }
+      }
+      .auth-container__form-btn {
+        width: 100%;
+        height: 42px;
+        background-color: #6473ff !important;
+        margin-bottom: 10px;
+        margin-top: 10px;
+      }
+      label {
+        font-size: 14px;
+        font-weight: 400;
+        color: #555;
+      }
+      img {
+        height: 36px;
+        width: auto;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #222222;
+        padding-bottom: 5px;
+      }
+      p {
+        font-size: 14px;
+        font-weight: 400;
+        color: #999;
+        padding-bottom: 20px;
+      }
+    }
+  }
+}
