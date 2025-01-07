@@ -2,25 +2,46 @@ import "./index.scss";
 import SoftwareProjectIcon from "../../assets/software-project.svg";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Skeleton } from "antd";
 
 const DashboardSidebar = () => {
   const [activeMenu, setActiveMenu] = useState("board");
+  const [project, setProject] = useState<any>(null);
 
   const location = useLocation();
 
   useEffect(() => {
     setActiveMenu(location.pathname);
-  }, []);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (localStorage.getItem("current_project")) {
+      const projectData = JSON.parse(
+        localStorage.getItem("current_project") || ""
+      );
+      setProject(projectData);
+    }
+  }, [localStorage.getItem("current_project")]);
 
   return (
     <div className="dashboard-sidebar__container">
-      <div className="dashboard-sidebar__project-container">
-        <img src={SoftwareProjectIcon} alt="software icon" />
-        <div className="dashboard-sidebar__project-text">
-          <h6>Project Dev</h6>
-          <p>Software Project</p>
+      {project ? (
+        <div className="dashboard-sidebar__project-container">
+          <img src={SoftwareProjectIcon} alt="software icon" />
+          <div className="dashboard-sidebar__project-text">
+            <h6>{project?.name}</h6>
+            <p>{project?.type}</p>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="dashboard-sidebar__project-container">
+          <img src={SoftwareProjectIcon} alt="software icon" />
+          <div className="dashboard-sidebar__project-text">
+            <h6>Project Name</h6>
+            <p>Project Type</p>
+          </div>
+        </div>
+      )}
 
       <div className="dashboard-sidebar__project-links">
         <h4>PLANNING</h4>

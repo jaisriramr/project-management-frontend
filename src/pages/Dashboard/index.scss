@@ -6,6 +6,8 @@
     display: flex;
     .dashboard-main-board {
       padding: 40px;
+      position: relative;
+      z-index: -1;
       width: calc(100vw - 240px);
 
       .dashboard-main__board-nav {

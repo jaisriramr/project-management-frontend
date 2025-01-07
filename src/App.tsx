@@ -9,6 +9,11 @@ import DashboardSummary from "./pages/Dashboard-Summary";
 import DashboardBoard from "./pages/Dashboard-Board";
 import DashboardList from "./pages/Dashboard-List";
 import DashboardBacklog from "./pages/Dashboard-Backlog";
+import CrudLayout from "./pages/CRUD-Layout";
+import Projects from "./pages/Projects";
+import CreateProject from "./pages/Projects/create-project";
+import { RecoilRoot, useRecoilSnapshot } from "recoil";
+import React, { useEffect } from "react";
 
 function App() {
   const router = createBrowserRouter([
@@ -39,6 +44,20 @@ function App() {
       ],
     },
     {
+      path: "/dashboard",
+      element: <CrudLayout />,
+      children: [
+        {
+          path: "projects",
+          element: <Projects />,
+        },
+        {
+          path: "create/project",
+          element: <CreateProject />,
+        },
+      ],
+    },
+    {
       path: "/login",
       element: <Login />,
     },
@@ -56,10 +75,22 @@ function App() {
     },
   ]);
 
+  function DebugObserver(): any {
+    const snapshot = useRecoilSnapshot();
+    useEffect(() => {
+      for (const node of snapshot.getNodes_UNSTABLE({ isModified: true })) {
+        console.debug(node.key, snapshot.getLoadable(node));
+      }
+    }, [snapshot]);
+  }
+
   return (
-    <div>
-      <RouterProvider router={router} />
-    </div>
+    <RecoilRoot key={"userId"}>
+      <DebugObserver />
+      <div>
+        <RouterProvider router={router} />
+      </div>
+    </RecoilRoot>
   );
 }
 

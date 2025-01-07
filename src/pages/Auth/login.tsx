@@ -7,6 +7,9 @@ import { container } from "tsyringe";
 import { AuthService } from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import * as jwt from "jwt-decode";
+import { useRecoilState } from "recoil";
+import { userData } from "../../atom/atom";
 
 const Login = () => {
   const [user, setUser] = useState({ email: "", password: "" });
@@ -14,6 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const [isValid, setIsValid] = useState<any>(null);
+  const [userDataAtom, setUserDataAtom] = useRecoilState(userData);
 
   async function handleLogin() {
     if (!user.email || !user.password) {
@@ -24,8 +28,11 @@ const Login = () => {
       userService
         .loginUser(user)
         .then((response) => {
+          const decoded = jwt.jwtDecode(response);
+          setUserDataAtom(decoded);
+
           localStorage.setItem("access_token", response);
-          navigate("/dashboard");
+          navigate("/dashboard/board");
           loading();
         })
         .catch((err) => {

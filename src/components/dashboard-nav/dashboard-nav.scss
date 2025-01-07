@@ -1,3 +1,13 @@
+.project-input {
+  margin-top: 10px;
+  height: 42px;
+}
+
+.project-btn {
+  margin-top: 15px;
+  background-color: #6473ff !important;
+}
+
 .dashboard-nav__container {
   display: flex;
   align-items: center;
@@ -17,6 +27,85 @@
     justify-content: center;
     cursor: pointer;
   }
+
+  .project-container {
+    position: absolute;
+    z-index: 10;
+    background: white;
+    box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    top: 60px;
+    left: 200px;
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    p {
+      padding: 15px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333333;
+    }
+    .project-container__list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
+
+      li {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        column-gap: 10px;
+        padding: 10px 15px;
+        .dashboard-container__details-image {
+          height: 42px;
+          width: 42px;
+          font-size: 14px;
+          font-weight: 500;
+          color: white;
+          border-radius: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-transform: uppercase;
+          background-color: #857aff;
+        }
+        .project-container__details {
+          h4 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333333;
+            padding-bottom: 5px;
+            text-transform: capitalize;
+          }
+          p {
+            text-transform: capitalize;
+            font-size: 12px;
+            font-weight: 400;
+            color: #999999;
+            padding: 0;
+          }
+        }
+      }
+      li:hover {
+        background-color: #f4f4f4;
+      }
+    }
+    .project-link {
+      border-top: 1px solid #ddd;
+      width: 100%;
+      padding: 15px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #333333;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .project-link:hover {
+      background-color: #f4f4f4;
+    }
+  }
+
   .dashboard-nav__small-svg {
     height: 16px;
     display: flex;
@@ -48,6 +137,7 @@
 
   .dashboard-nav__user-dropdown {
     position: absolute;
+    z-index: 10;
     right: 40px;
     top: 60px;
     background: white;
