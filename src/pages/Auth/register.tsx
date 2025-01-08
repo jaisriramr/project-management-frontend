@@ -7,6 +7,7 @@ import { container } from "tsyringe";
 import { AuthService } from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { faker } from "@faker-js/faker";
 
 const Register = () => {
   const [user, setUser] = useState({ name: "", email: "", password: "" });
@@ -29,6 +30,7 @@ const Register = () => {
         ...user,
         status: "Active",
         roles: [import.meta.env.VITE_ADMIN_ROLE],
+        picture: faker.image.avatar(),
       };
 
       userService

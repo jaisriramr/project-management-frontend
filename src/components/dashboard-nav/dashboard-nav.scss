@@ -2,6 +2,11 @@
   margin-top: 10px;
   height: 42px;
 }
+.dashboard-nav__user-card-pic {
+  height: 42px;
+  width: auto;
+  border-radius: 100px;
+}
 
 .project-btn {
   margin-top: 15px;
@@ -175,12 +180,6 @@
         display: flex;
         align-items: center;
         column-gap: 20px;
-
-        .dashboard-nav__user-card-pic {
-          height: 42px;
-          width: auto;
-          border-radius: 100px;
-        }
 
         .dashboard-nav__user-card-row {
           h6 {

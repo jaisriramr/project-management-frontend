@@ -21,13 +21,12 @@ import { Link } from "react-router-dom";
 import { container } from "tsyringe";
 import { ProjectService } from "../../services/project.service";
 import { useQuery } from "@tanstack/react-query";
-import { useRecoilState } from "recoil";
-import { selectedProjectData } from "../../atom/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { selectedProjectData, userData } from "../../atom/atom";
 
 export const DashboardNav = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>();
-  const [profilePic, setProfilePic] = useState<any>();
+  const user = useRecoilValue(userData);
 
   const projectService = container.resolve(ProjectService);
 
@@ -47,11 +46,11 @@ export const DashboardNav = () => {
     queryFn: () => projectService.ListProjectsByOrgID(user?.org_id),
     enabled: !!user?.org_id,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   useEffect(() => {
-    if (projects && projects.length > 0) {
-      console.log("PROOOO ");
+    if (projects && projects.length > 0 && selectedProject == null) {
       setSelectedProject(projects[0]);
     }
   }, [projects]);
@@ -65,28 +64,17 @@ export const DashboardNav = () => {
       }
     });
 
-    if (localStorage.getItem("access_token")) {
-      const decoded: any = jwtDecode.jwtDecode(
-        localStorage.getItem("access_token") || ""
-      );
-      console.log(decoded);
-      if (decoded?.picture) {
-        setProfilePic(decoded?.picture);
-      }
-      setUser(decoded);
-    }
+    // if (localStorage.getItem("access_token")) {
+    //   const decoded: any = jwtDecode.jwtDecode(
+    //     localStorage.getItem("access_token") || ""
+    //   );
+    //   console.log(decoded);
+    //   if (decoded?.picture) {
+    //     setProfilePic(decoded?.picture);
+    //   }
+    //   setUser(decoded);
+    // }
   }, []);
-
-  // useEffect(() => {
-  //   const dropdownElement = document.querySelector(
-  //     ".dashboard-nav__user-dropdown"
-  //   ) as HTMLElement;
-  //   if (dropdown) {
-  //     dropdownElement.style.display = "block";
-  //   } else {
-  //     dropdownElement.style.display = "none";
-  //   }
-  // }, [dropdown]);
 
   function handleLogout() {
     localStorage.removeItem("access_token");
@@ -101,10 +89,10 @@ export const DashboardNav = () => {
         <div className="dashboard-nav__id dashboard-nav__user-account">
           <label className="dashboard-nav__id">Account</label>
           <div className="dashboard-nav__id dashboard-nav__user-card">
-            {profilePic ? (
+            {user?.picture ? (
               <>
                 <img
-                  src={profilePic}
+                  src={user?.picture}
                   alt="user"
                   className="dashboard-nav__id dashboard-nav__user-card-pic"
                   loading="lazy"
@@ -243,12 +231,13 @@ export const DashboardNav = () => {
           <img src={Bell} alt="bell" className="dashboard-nav__bell" />
         </li>
         <li className="dashboard-nav-link">
-          {profilePic ? (
+          {user?.picture ? (
             <>
               <img
                 onClick={() => setDropdown(!dropdown)}
-                src={profilePic}
+                src={user?.picture}
                 alt="user"
+                style={{ cursor: "pointer" }}
                 className="dashboard-nav__id dashboard-nav__user-card-pic"
                 loading="lazy"
               />

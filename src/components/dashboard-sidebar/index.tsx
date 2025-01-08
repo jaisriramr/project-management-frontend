@@ -3,34 +3,31 @@ import SoftwareProjectIcon from "../../assets/software-project.svg";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Skeleton } from "antd";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { selectedProjectData } from "../../atom/atom";
 
 const DashboardSidebar = () => {
   const [activeMenu, setActiveMenu] = useState("board");
-  const [project, setProject] = useState<any>(null);
+  const selectedProject = useRecoilValue<any>(selectedProjectData);
 
   const location = useLocation();
+
+  useEffect(() => {
+    console.log(selectedProject);
+  }, [selectedProject]);
 
   useEffect(() => {
     setActiveMenu(location.pathname);
   }, [location.pathname]);
 
-  useEffect(() => {
-    if (localStorage.getItem("current_project")) {
-      const projectData = JSON.parse(
-        localStorage.getItem("current_project") || ""
-      );
-      setProject(projectData);
-    }
-  }, [localStorage.getItem("current_project")]);
-
   return (
     <div className="dashboard-sidebar__container">
-      {project ? (
+      {selectedProject ? (
         <div className="dashboard-sidebar__project-container">
           <img src={SoftwareProjectIcon} alt="software icon" />
           <div className="dashboard-sidebar__project-text">
-            <h6>{project?.name}</h6>
-            <p>{project?.type}</p>
+            <h6>{selectedProject?.name}</h6>
+            <p>{selectedProject?.type}</p>
           </div>
         </div>
       ) : (

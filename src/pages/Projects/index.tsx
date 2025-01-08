@@ -4,22 +4,28 @@ import { container } from "tsyringe";
 import { ProjectService } from "../../services/project.service";
 import { useEffect, useState } from "react";
 import * as jwtDecode from "jwt-decode";
-import { useRecoilValue } from "recoil";
-import { userData } from "../../atom/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { selectedProjectData, userData } from "../../atom/atom";
 import {
   Col,
   Input,
   Pagination,
+  Popover,
   Row,
   Table,
   TableColumnsType,
   TableProps,
 } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { faker } from "@faker-js/faker";
 
 const Projects = () => {
   const user = useRecoilValue(userData);
+  const navigate = useNavigate();
   const [search, setSearch] = useState<string>("");
   const [projectsData, setProjectsData] = useState<any>(null);
+  const [selectedProject, setSelectedProject] =
+    useRecoilState<any>(selectedProjectData);
 
   const projectService = container.resolve(ProjectService);
   const [page, setPage] = useState<number>(1);
@@ -35,12 +41,32 @@ const Projects = () => {
     refetchOnWindowFocus: false,
   });
 
+  function handleNavigate(record: any) {
+    setSelectedProject(projects?.data[record.key]);
+    navigate("/dashboard/board");
+  }
+
+  const imageArr = [
+    "https://cdn.pixabay.com/photo/2015/12/04/22/20/gear-1077550_1280.png",
+    "https://cdn.pixabay.com/photo/2015/12/22/04/00/edit-1103599_1280.png",
+    "https://cdn.pixabay.com/photo/2021/03/27/06/31/code-6127616_1280.png",
+  ];
+
   const columns: TableColumnsType<any> = [
     {
       title: "Name",
       dataIndex: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
       sortDirections: ["ascend", "descend"],
+      render: (text: string, record: any) => (
+        <div onClick={() => handleNavigate(record)} className="table-link">
+          <img
+            src={imageArr[Math.floor(Math.random() * imageArr.length)]}
+            alt={text}
+          />
+          {text}
+        </div>
+      ),
     },
     {
       title: "Key",
@@ -53,6 +79,37 @@ const Projects = () => {
       dataIndex: "lead",
       sorter: (a, b) => a.lead.localeCompare(b.lead),
       sortDirections: ["ascend", "descend"],
+      render: (text: string, record: any) => (
+        <div className="project-table-lead-container">
+          <div className="project__table-popup-holder">
+            <img
+              src={projects?.data[record.key]?.lead?.picture}
+              alt={text}
+              className="project-table-lead-picture"
+            />
+            <div className="project-lead-popup">
+              <div className="project-lead-popup__bg">
+                <h4>{text}</h4>
+              </div>
+              <div className="project-lead-popup__btn">
+                <Link
+                  to={"/dashboard/user/" + projects?.data[record.key]?.lead_id}
+                  className="project-lead-popup__link"
+                >
+                  View Profile
+                </Link>
+              </div>
+              <div className="project-lead-popup__profile">
+                <img
+                  src={projects?.data[record.key]?.lead?.picture}
+                  alt={text}
+                />
+              </div>
+            </div>
+          </div>
+          <label>{text}</label>
+        </div>
+      ),
     },
   ];
 
@@ -87,7 +144,10 @@ const Projects = () => {
   }
 
   return (
-    <div className="projects-container">
+    <div
+      className="projects-container"
+      onClick={() => console.log(faker.image.urlPicsumPhotos())}
+    >
       <h2 className="projects-title">Projects</h2>
       <Input
         type="text"

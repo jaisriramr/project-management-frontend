@@ -7,7 +7,7 @@ const userData = atom<any>({
 
 const selectedProjectData = atom({
   key: "selected-project",
-  default: {},
+  default: null,
 });
 
 export { userData, selectedProjectData };
