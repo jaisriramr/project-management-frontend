@@ -1,13 +1,26 @@
-import { Checkbox, Dropdown, Input, MenuProps } from "antd";
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  Input,
+  MenuProps,
+  Modal,
+  Select,
+} from "antd";
 import "./index.scss";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { container } from "tsyringe";
 import { AuthService } from "../../services/auth.service";
 import DropDownIcon from "../../assets/angle-down.svg";
+import { useRecoilValue } from "recoil";
+import { userData } from "../../atom/atom";
+const { Option } = Select;
 
-const DashboardSearchbar = ({ org_id }: { org_id: string }) => {
+const DashboardSearchbar = () => {
   const userService = container.resolve(AuthService);
+  const [addUser, setAddUser] = useState(false);
+  const [newUserEmail, setNewUserEmail] = useState<any>("");
 
   const [filter, setFilter] = useState<any>({
     assignees: [],
@@ -15,10 +28,15 @@ const DashboardSearchbar = ({ org_id }: { org_id: string }) => {
     search: "",
   });
 
+  const user = useRecoilValue(userData);
+
   const { data: members } = useQuery({
     queryKey: ["members_of_orgs"],
-    queryFn: () => userService.getMembersOfOrg("org_CQG7EPOyiYzqzWfv"),
-    enabled: !!org_id,
+    queryFn: () => userService.getMembersOfOrg(user?.org_id),
+    enabled: !!user?.org_id,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 
   useEffect(() => {
@@ -126,7 +144,10 @@ const DashboardSearchbar = ({ org_id }: { org_id: string }) => {
           </div>
           <div className="dashboard-search__user-list">{showMembersList()}</div>
         </div>
-        <div className="dashboard-search__user-add">
+        {/* <div
+          className="dashboard-search__user-add"
+          onClick={() => setAddUser(true)}
+        >
           <svg
             width="25"
             height="21"
@@ -139,7 +160,7 @@ const DashboardSearchbar = ({ org_id }: { org_id: string }) => {
               fill="#333333"
             />
           </svg>
-        </div>
+        </div> */}
       </div>
 
       <Dropdown menu={{ items }} trigger={["click"]}>
@@ -148,6 +169,35 @@ const DashboardSearchbar = ({ org_id }: { org_id: string }) => {
           <img src={DropDownIcon} alt="Dropdown" />
         </div>
       </Dropdown>
+
+      {/* <Modal
+        open={addUser}
+        title="Add User to the Organisation"
+        footer={null}
+        onCancel={() => setAddUser(false)}
+        onClose={() => setAddUser(false)}
+        width={"320px"}
+      >
+        <div className="add-user-group">
+          <label>Email</label>
+          <Input
+            type="text"
+            placeholder="Enter email ID"
+            value={newUserEmail}
+            onChange={(e) => setNewUserEmail(e.target.value)}
+          />
+        </div>
+        <div className="add-user-group">
+          <label>Role</label>
+          <Select>
+            <Option value="677bcbee2877d9b3dc87b775">Admin</Option>
+            <Option value="677e4539a6442a01dbbeb133">Developer</Option>
+            <Option value="677e455aa6442a01dbbeb135">DevOps</Option>
+            <Option value="677e4570a6442a01dbbeb137">QA Engineer</Option>
+          </Select>
+        </div>
+        <Button >Invite User</Button>
+      </Modal> */}
     </div>
   );
 };

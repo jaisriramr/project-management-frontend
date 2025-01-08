@@ -144,10 +144,7 @@ const Projects = () => {
   }
 
   return (
-    <div
-      className="projects-container"
-      onClick={() => console.log(faker.image.urlPicsumPhotos())}
-    >
+    <div className="projects-container">
       <h2 className="projects-title">Projects</h2>
       <Input
         type="text"

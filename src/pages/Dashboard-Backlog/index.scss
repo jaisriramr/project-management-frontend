@@ -1,0 +1,124 @@
+.dashboard-backlog {
+  padding: 20px 0 0 0;
+  height: calc(100vh - 60px - 40px - 32px - 60px - 18px);
+}
+
+.dashboard-backlog__container {
+  position: relative;
+  .dashboard-backlog__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .dashboard-backlog__header-left {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      column-gap: 10px;
+      .dashboard-backlog__header-toggle-icon {
+        img {
+          height: 18px;
+          width: 18px;
+        }
+      }
+      h4 {
+        font-size: 16px;
+        font-weight: 500;
+        color: #555;
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .dashboard-backlog__header-right {
+      display: flex;
+      align-items: center;
+      column-gap: 10px;
+      .dashboard-backlog__points {
+        padding: 5px 8px;
+        border-radius: 50px;
+        font-size: 12px;
+        cursor: default;
+      }
+      .dashboard-backlog__todo-points {
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      .dashboard-backlog__inprogress-points {
+        background-color: #0052cc;
+        color: white;
+      }
+      .dashboard-backlog__done-points {
+        background-color: #36b37e;
+        color: white;
+      }
+      .dashboard-backlog__btn {
+        background-color: #ddd;
+        border: none;
+      }
+    }
+  }
+  .dashboard-backlog__table {
+    padding: 10px 0;
+    .dashboard-backlog__empty {
+      height: 100px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f4f4f4;
+    }
+  }
+  .dashboard-backlog__create-issue {
+    .dashboard-backlog__create-issue-btn {
+      display: flex;
+      align-items: center;
+      column-gap: 10px;
+      height: 32px;
+      cursor: pointer;
+      width: 100%;
+      padding-left: 10px;
+      img {
+        height: 16px;
+        width: 16px;
+      }
+      h6 {
+        font-size: 14px;
+        font-weight: 400;
+      }
+    }
+  }
+  .dashboard-backlog__create-issue:hover {
+    .dashboard-backlog__create-issue-btn {
+      background-color: #f4f4f4;
+    }
+  }
+}
+
+.dashboard-backlog__create-form {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  position: relative;
+}
+
+.dashboard-backlog__create-dropdown-container {
+  position: absolute;
+  z-index: 2;
+  left: 10px;
+}
+
+.dashboard-backlog__issue-icon {
+  height: 16px;
+  width: 16px;
+}
+
+.dashboard-backlog__issue-menu {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.dashboard-backlog__create-input {
+  padding-left: 34px;
+}

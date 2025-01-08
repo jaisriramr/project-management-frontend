@@ -1,0 +1,16 @@
+.dashboard-backlog__row-type {
+  height: 16px;
+  width: 16px;
+}
+
+.dashboard-backlog__row {
+  border: 1px solid #eee;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 10px;
+}
+.dashboard-backlog__row:hover {
+  background-color: #f4f4f4;
+}
