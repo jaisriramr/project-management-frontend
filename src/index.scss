@@ -24,3 +24,40 @@
   color: #222;
   text-decoration: underline;
 }
+
+.dashboard-sprint__table-profile {
+  height: 24px;
+  width: 24px;
+  border-radius: 100px;
+  cursor: pointer;
+  img {
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+  }
+}
+
+.dashboard-sprint__table-dropdown {
+  display: flex;
+  align-items: center;
+  img {
+    height: 16px;
+    width: 16px;
+  }
+}
+
+.dashboard-sprint__table-type {
+  height: 14px;
+  width: 14px;
+}
+
+.dashboard-sprint__table-points {
+  font-size: 14px;
+  color: #222;
+  background-color: #eee;
+  padding: 2px 4px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

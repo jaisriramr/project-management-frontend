@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { TaskService } from "../../services/task.service";
 import { container } from "tsyringe";
@@ -11,6 +11,7 @@ import {
   MenuProps,
   message,
   Row,
+  Table,
   Tooltip,
 } from "antd";
 import dropdownIcon from "../../assets/angle-down.svg";
@@ -21,6 +22,9 @@ import StoryIcon from "../../assets/issues/story.svg";
 import BugIcon from "../../assets/issues/bug.svg";
 import { useQuery } from "@tanstack/react-query";
 import "./index.scss";
+import { ColumnsType } from "antd/es/table";
+import Pen from "../../assets/pen.svg";
+import TaskLog from "./TaskLog/task-log";
 
 const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
   console.log("SPRINT ", sprint_id);
@@ -29,6 +33,9 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
   const [createTask, setCreateTask] = useState({ type: "task", name: "" });
   const [isCreateTask, setIsCreateTask] = useState<boolean>(false);
   const taskService = container.resolve(TaskService);
+  const [listTasks, setListTasks] = useState<any>();
+  const [isTitleEdit, setIsTitleEdit] = useState<boolean>(false);
+  const [titleEdit, setTitleEdit] = useState<string>("");
 
   const {
     data: tasks,
@@ -40,6 +47,24 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
     enabled: !!sprint_id,
     refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    if (!isLoading && tasks) {
+      const tData: any = [];
+      tasks?.map((task: any, i: any) => {
+        tData.push({
+          key: i,
+          type: task?.type,
+          task_no: task?.task_no,
+          title: task?.title,
+          status: task?.status,
+          points: task?.story_points,
+          assignee: task?.assignee,
+        });
+      });
+      setListTasks(tData);
+    }
+  }, [tasks]);
 
   const items: MenuProps["items"] = [
     {
@@ -104,6 +129,7 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
       priority: "medium",
       assignee: {
         name: user?.name,
+        picture: user?.picture,
         user_id: user?._id,
       },
     };
@@ -112,6 +138,18 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
     await taskService
       .createTask(taskData)
       .then((response) => {
+        setListTasks([
+          ...listTasks,
+          {
+            key: listTasks.length + 1,
+            type: response?.type,
+            task_no: response?.task_no,
+            title: response?.title,
+            status: response?.status,
+            points: response?.story_points ? response?.story_points : 0,
+            assignee: response?.assignee,
+          },
+        ]);
         loading();
         message.success("Task Created Successfully!");
       })
@@ -123,9 +161,158 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
             : "Internal Server Error"
         );
       });
-
-    console.log(taskData);
   }
+
+  const dropdownStatus: MenuProps["items"] = [
+    {
+      key: "0",
+      label: "To Do",
+      onClick: (e) => console.log(e),
+    },
+    {
+      key: "1",
+      label: "In Progress",
+    },
+    {
+      key: "2",
+      label: "In Development",
+    },
+    {
+      key: "3",
+      label: "Qa",
+    },
+    {
+      key: "4",
+      label: "Production",
+    },
+    {
+      key: "5",
+      label: "Done",
+    },
+  ];
+
+  function handleEditChange(record: any) {
+    console.log("TEED ", record);
+    setIsTitleEdit(true);
+  }
+
+  const columns: ColumnsType<any> = [
+    {
+      title: "",
+      dataIndex: "type",
+      width: "10px",
+      render: (text: string) => (
+        <div>
+          {text == "task" ? (
+            <img
+              src={TaskIcon}
+              alt="Task"
+              className="dashboard-sprint__table-type"
+            />
+          ) : text == "story" ? (
+            <img
+              src={StoryIcon}
+              alt="Story"
+              className="dashboard-sprint__table-type"
+            />
+          ) : (
+            <img
+              src={BugIcon}
+              alt="Bug"
+              className="dashboard-sprint__table-type"
+            />
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "",
+      dataIndex: "task_no",
+      width: "100px",
+      render: (text: string) => <p style={{ fontSize: "12px" }}>{text}</p>,
+    },
+    {
+      title: "",
+      dataIndex: "title",
+      render: (text: string, record: any) => (
+        <div className="dashboard-sprint_table-title">
+          <div className="dashboard-sprint_table-title">
+            <Tooltip title={text}>
+              <p>{text}</p>
+            </Tooltip>
+            <Tooltip title="Edit Summary">
+              <div
+                className="dashboard-sprint__table-edit"
+                onClick={() => handleEditChange(record)}
+              >
+                <img src={Pen} alt="Text For title" />
+              </div>
+            </Tooltip>
+          </div>
+          {isTitleEdit && (
+            <Input
+              type="text"
+              value={titleEdit}
+              onChange={(e) => setTitleEdit(e.target.value)}
+            />
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "",
+      dataIndex: "status",
+      width: "200px",
+      render: (text: any) => (
+        <Dropdown trigger={["click"]} menu={{ items: dropdownStatus }}>
+          <Row
+            gutter={5}
+            style={{ cursor: "pointer" }}
+            className={
+              text == "To Do"
+                ? "dashboard-sprint__table-dropdown dashboard-sprint__table-dropdown-todo"
+                : text == "In Progress"
+                ? "dashboard-sprint__table-dropdown dashboard-sprint__table-dropdown-qa"
+                : text == "In Development"
+                ? "dashboard-sprint__table-dropdown dashboard-sprint__table-dropdown-qa"
+                : text == "QA"
+                ? "dashboard-sprint__table-dropdown dashboard-sprint__table-dropdown-qa"
+                : text == "Production"
+                ? "dashboard-sprint__table-dropdown dashboard-sprint__table-dropdown-prod"
+                : text == "Done"
+                ? "dashboard-sprint__table-dropdown dashboard-sprint__table-dropdown-prod"
+                : "dashboard-sprint__table-dropdown"
+            }
+          >
+            <p>{text}</p>
+            <img src={dropdownIcon} alt="dropdown" />
+          </Row>
+        </Dropdown>
+      ),
+    },
+    {
+      title: "",
+      dataIndex: "story_points",
+      width: "16px",
+      render: (text: any) => (
+        <Tooltip title="Story Points">
+          <div className="dashboard-sprint__table-points">
+            {text?.story_points ? text?.story_points : 0}
+          </div>
+        </Tooltip>
+      ),
+    },
+    {
+      title: "",
+      dataIndex: "assignee",
+      width: "100px",
+      render: (text: any) => (
+        <div className="dashboard-sprint__table-profile">
+          <img src={text?.picture} alt={text?.name} />
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className="dashboard-backlog__container">
@@ -157,7 +344,7 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
       </div>
       <div>
         <div className="dashboard-backlog__table">
-          {tasks ? (
+          {/* {tasks && tasks.length > 0 ? (
             tasks?.map((task: any) => (
               <div className="dashboard-backlog__row-container">
                 <Row gutter={10} className="dashboard-backlog__row">
@@ -184,8 +371,18 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
               </div>
             ))
           ) : (
-            <div>No Task Found</div>
-          )}
+            <div className="dashboard-backlog__no-task">No Task Found</div>
+          )} */}
+          {tasks?.map((task: any) => (
+            <TaskLog taskData={task} />
+          ))}
+          {/* <Table
+            showHeader={false}
+            columns={columns}
+            pagination={false}
+            dataSource={listTasks}
+            rowKey="key"
+          /> */}
         </div>
         <div className="dashboard-backlog__create-issue">
           {!isCreateTask && (
