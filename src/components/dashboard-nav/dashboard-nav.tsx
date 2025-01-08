@@ -50,8 +50,21 @@ export const DashboardNav = () => {
   });
 
   useEffect(() => {
-    if (projects && projects.length > 0 && selectedProject == null) {
+    if (
+      projects &&
+      projects.length > 0 &&
+      selectedProject == null &&
+      !localStorage.getItem("selected-project")
+    ) {
       setSelectedProject(projects[0]);
+      localStorage.setItem("selected-project", JSON.stringify(projects[0]));
+    }
+
+    if (localStorage.getItem("selected-project")) {
+      const parsedProject = JSON.parse(
+        localStorage.getItem("selected-project") || ""
+      );
+      setSelectedProject(parsedProject);
     }
   }, [projects]);
 
@@ -129,6 +142,7 @@ export const DashboardNav = () => {
 
   function handleProjectSelection(project: any) {
     setSelectedProject(project);
+    localStorage.setItem("selected-project", JSON.stringify(projects[0]));
     navigate("/dashboard/board");
     setProjectDropdown(false);
   }

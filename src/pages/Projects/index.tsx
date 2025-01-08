@@ -43,6 +43,10 @@ const Projects = () => {
 
   function handleNavigate(record: any) {
     setSelectedProject(projects?.data[record.key]);
+    localStorage.setItem(
+      "selected-project",
+      JSON.stringify(projects?.data[record.key])
+    );
     navigate("/dashboard/board");
   }
 
