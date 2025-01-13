@@ -2,8 +2,10 @@ import "./index.scss";
 import Logo from "../../assets/logo.svg";
 import HeroImage from "../../assets/hero-images/hero-image.png";
 import { Button } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TechImage from "../../assets/hero-images/tech-image.svg";
+import { useEffect } from "react";
+import * as jwt from "jwt-decode";
 // import useSocket from "../../services/notification.service";
 
 export const Home = () => {
@@ -12,6 +14,22 @@ export const Home = () => {
 
   const inviteMatches: any = url.match(/invitation=([^&]+)/);
   const orgMatches: any = url.match(/organization=([^&]+)/);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("access_token")) {
+      const decoded: any = jwt.jwtDecode(
+        localStorage.getItem("access_token") || ""
+      );
+      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+
+      console.log(decoded, decoded.exp > currentTime);
+
+      if (decoded.exp > currentTime) {
+        navigate("/dashboard/board");
+      }
+    }
+  }, []);
 
   return (
     <div className="home-container">

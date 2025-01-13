@@ -13,20 +13,15 @@ import { useQuery } from "@tanstack/react-query";
 import { container } from "tsyringe";
 import { AuthService } from "../../services/auth.service";
 import DropDownIcon from "../../assets/angle-down.svg";
-import { useRecoilValue } from "recoil";
-import { userData } from "../../atom/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { filterTasksQuery, userData } from "../../atom/atom";
 const { Option } = Select;
 
 const DashboardSearchbar = () => {
   const userService = container.resolve(AuthService);
   const [addUser, setAddUser] = useState(false);
   const [newUserEmail, setNewUserEmail] = useState<any>("");
-
-  const [filter, setFilter] = useState<any>({
-    assignees: [],
-    type: [],
-    search: "",
-  });
+  const [filter, setFilter] = useRecoilState<any>(filterTasksQuery);
 
   const user = useRecoilValue(userData);
 
@@ -67,7 +62,7 @@ const DashboardSearchbar = () => {
     {
       label: (
         <div className="dashboard-flex-gap-10">
-          <Checkbox />
+          <Checkbox onChange={(e) => handleCheck(e, "bug")} />
           <span>Bug</span>
         </div>
       ),
@@ -76,7 +71,7 @@ const DashboardSearchbar = () => {
     {
       label: (
         <div className="dashboard-flex-gap-10">
-          <Checkbox />
+          <Checkbox onChange={(e) => handleCheck(e, "story")} />
           <span>Story</span>
         </div>
       ),
@@ -85,13 +80,21 @@ const DashboardSearchbar = () => {
     {
       label: (
         <div className="dashboard-flex-gap-10">
-          <Checkbox />
+          <Checkbox onChange={(e) => handleCheck(e, "task")} />
           <span>Task</span>
         </div>
       ),
       key: "2",
     },
   ];
+
+  function handleCheck(e: any, type: any) {
+    if (e.target.checked) {
+      setFilter({ ...filter, type: type });
+    } else {
+      setFilter({ ...filter, type: null });
+    }
+  }
 
   return (
     <div className="dashboard-search__container">
@@ -116,7 +119,11 @@ const DashboardSearchbar = () => {
             stroke-linejoin="round"
           />
         </svg>
-        <Input placeholder="Search" className="dashboard-search__input" />
+        <Input
+          placeholder="Search"
+          className="dashboard-search__input"
+          onChange={(e) => setFilter({ ...filter, title: e.target.value })}
+        />
       </div>
 
       <div className="dashboard-search__user-container">

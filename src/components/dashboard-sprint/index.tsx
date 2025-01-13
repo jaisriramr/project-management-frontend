@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { TaskService } from "../../services/task.service";
 import { container } from "tsyringe";
-import { selectedProjectData, userData } from "../../atom/atom";
+import {
+  filterTasksQuery,
+  selectedProjectData,
+  userData,
+} from "../../atom/atom";
 import {
   Button,
   Col,
@@ -27,7 +31,6 @@ import Pen from "../../assets/pen.svg";
 import TaskLog from "./TaskLog/task-log";
 
 const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
-  console.log("SPRINT ", sprint_id);
   const user = useRecoilValue(userData);
   const selectedProject = useRecoilValue<any>(selectedProjectData);
   const [createTask, setCreateTask] = useState({ type: "task", name: "" });
@@ -36,33 +39,50 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
   const [listTasks, setListTasks] = useState<any>();
   const [isTitleEdit, setIsTitleEdit] = useState<boolean>(false);
   const [titleEdit, setTitleEdit] = useState<string>("");
+  const [filterTask, setFilterTask] = useRecoilState<any>(filterTasksQuery);
 
-  const {
-    data: tasks,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["list-taskss-for-sprint", sprint_id],
-    queryFn: () => taskService.getSprintTasks(sprint_id),
-    enabled: !!sprint_id,
+  useEffect(() => {
+    document.addEventListener("mouseup", (e) => {
+      const element = e.target as HTMLElement;
+      console.log(element.classList);
+      // if (!element.classList.contains("dashboard-backlog__create-form-id")) {
+      //   setIsCreateTask(false);
+      // }
+    });
+
+    if (sprint_id) {
+      setFilterTask({ ...filterTask, sprint_id: sprint_id });
+    }
+  }, [sprint_id]);
+
+  // const {
+  //   data: tasks,
+  //   isLoading,
+  //   isError,
+  // } = useQuery({
+  //   queryKey: ["list-taskss-for-sprint", sprint_id],
+  //   queryFn: () => taskService.getSprintTasks(sprint_id),
+  //   enabled: !!sprint_id,
+  //   refetchOnWindowFocus: false,
+  // });
+
+  const { data: tasks, isLoading } = useQuery({
+    queryKey: [
+      "filter-tasks-for-sprint",
+      filterTask.sprint_id,
+      filterTask.title,
+      filterTask.assignees_ids,
+      filterTask.labels,
+      filterTask.type,
+    ],
+    queryFn: () => taskService.filterTask(filterTask),
     refetchOnWindowFocus: false,
+    enabled: !!filterTask.sprint_id,
   });
 
   useEffect(() => {
     if (!isLoading && tasks) {
-      const tData: any = [];
-      tasks?.map((task: any, i: any) => {
-        tData.push({
-          key: i,
-          type: task?.type,
-          task_no: task?.task_no,
-          title: task?.title,
-          status: task?.status,
-          points: task?.story_points,
-          assignee: task?.assignee,
-        });
-      });
-      setListTasks(tData);
+      setListTasks(tasks);
     }
   }, [tasks]);
 
@@ -71,15 +91,15 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
       key: "0",
       label: (
         <div
-          className="dashboard-backlog__issue-menu"
+          className="dashboard-backlog__create-form-id dashboard-backlog__issue-menu"
           onClick={() => setCreateTask({ ...createTask, type: "task" })}
         >
           <img
-            className="dashboard-backlog__issue-icon"
+            className="dashboard-backlog__create-form-id dashboard-backlog__issue-icon"
             src={TaskIcon}
             alt="task"
           />{" "}
-          <p>Task</p>
+          <p className="dashboard-backlog__create-form-id">Task</p>
         </div>
       ),
     },
@@ -87,15 +107,15 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
       key: "1",
       label: (
         <div
-          className="dashboard-backlog__issue-menu"
+          className="dashboard-backlog__create-form-id dashboard-backlog__issue-menu"
           onClick={() => setCreateTask({ ...createTask, type: "story" })}
         >
           <img
-            className="dashboard-backlog__issue-icon"
+            className="dashboard-backlog__create-form-id dashboard-backlog__issue-icon"
             src={StoryIcon}
             alt="story"
           />{" "}
-          <p>Story</p>
+          <p className="dashboard-backlog__create-form-id">Story</p>
         </div>
       ),
     },
@@ -103,15 +123,15 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
       key: "2",
       label: (
         <div
-          className="dashboard-backlog__issue-menu"
+          className="dashboard-backlog__create-form-id dashboard-backlog__issue-menu"
           onClick={() => setCreateTask({ ...createTask, type: "bug" })}
         >
           <img
-            className="dashboard-backlog__issue-icon"
+            className="dashboard-backlog__create-form-id dashboard-backlog__issue-icon"
             src={BugIcon}
             alt="bug"
           />{" "}
-          <p>Bug</p>
+          <p className="dashboard-backlog__create-form-id">Bug</p>
         </div>
       ),
     },
@@ -152,6 +172,7 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
         ]);
         loading();
         message.success("Task Created Successfully!");
+        setCreateTask({ type: "task", name: "" });
       })
       .catch((err) => {
         loading();
@@ -192,7 +213,6 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
   ];
 
   function handleEditChange(record: any) {
-    console.log("TEED ", record);
     setIsTitleEdit(true);
   }
 
@@ -326,17 +346,21 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
         <div className="dashboard-backlog__header-right">
           <Tooltip title="Todo: 0 of 0 (story points)">
             <div className="dashboard-backlog__points dashboard-backlog__todo-points">
-              0
+              {listTasks?.filter((task: any) => task.status == "To Do").length}
             </div>
           </Tooltip>
           <Tooltip title="In Progress: 0 of 0 (story points)">
             <div className="dashboard-backlog__points dashboard-backlog__inprogress-points">
-              0
+              {listTasks?.filter((task: any) => task.status == "In Progress")
+                .length +
+                listTasks?.filter((task: any) => task.status == "Qa").length}
             </div>
           </Tooltip>
           <Tooltip title="Done: 0 of 0 (story points)">
             <div className="dashboard-backlog__points dashboard-backlog__done-points">
-              0
+              {listTasks?.filter((task: any) => task.status == "Production")
+                .length +
+                listTasks?.filter((task: any) => task.status == "Done").length}
             </div>
           </Tooltip>
           <Button className="dashboard-backlog__btn">Create Sprint</Button>
@@ -373,7 +397,7 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
           ) : (
             <div className="dashboard-backlog__no-task">No Task Found</div>
           )} */}
-          {tasks?.map((task: any) => (
+          {listTasks?.map((task: any) => (
             <TaskLog taskData={task} />
           ))}
           {/* <Table
@@ -395,28 +419,51 @@ const DashboardSprint = ({ sprint_id }: { sprint_id: string }) => {
             </div>
           )}
           {isCreateTask && (
-            <div className="dashboard-backlog__create-form">
+            <div
+              className="dashboard-backlog__create-form-id dashboard-backlog__create-form"
+              // onBlur={() => setIsCreateTask(false)}
+            >
               <Dropdown
                 trigger={["click"]}
                 menu={{ items }}
-                className="dashboard-backlog__create-dropdown-container"
+                className="dashboard-backlog__create-form-id dashboard-backlog__create-dropdown-container"
               >
-                <img
-                  src={TaskIcon}
-                  alt="task"
-                  className="dashboard-backlog__issue-icon"
-                />
+                {createTask?.type == "task" ? (
+                  <img
+                    src={TaskIcon}
+                    alt="task"
+                    className="dashboard-backlog__create-form-id dashboard-backlog__issue-icon"
+                  />
+                ) : createTask?.type == "bug" ? (
+                  <img
+                    src={BugIcon}
+                    alt="bug"
+                    className="dashboard-backlog__create-form-id dashboard-backlog__issue-icon"
+                  />
+                ) : createTask?.type == "story" ? (
+                  <img
+                    src={StoryIcon}
+                    alt="Story"
+                    className="dashboard-backlog__create-form-id dashboard-backlog__issue-icon"
+                  />
+                ) : (
+                  <img
+                    src={BugIcon}
+                    alt="bug"
+                    className="dashboard-backlog__create-form-id dashboard-backlog__issue-icon"
+                  />
+                )}
               </Dropdown>
               <Input
-                onBlur={() => setIsCreateTask(false)}
                 onPressEnter={handleCreateTask}
                 autoFocus={true}
                 onChange={(e) =>
                   setCreateTask({ ...createTask, name: e.target.value })
                 }
                 type="text"
+                value={createTask.name}
                 placeholder="What need to be done?"
-                className="dashboard-backlog__create-input"
+                className="dashboard-backlog__create-form-id dashboard-backlog__create-input"
               />
             </div>
           )}

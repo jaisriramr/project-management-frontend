@@ -17,7 +17,6 @@ import { TaskService } from "../../../services/task.service";
 import { useEffect, useState } from "react";
 
 const TaskLog = ({ taskData }: { taskData: any }) => {
-  console.log("taskllll ", taskData);
   const [task, setTask] = useState(taskData);
   const [isStoryPoints, setIsStoryPoints] = useState<boolean>(false);
   const [isTitleEdit, setIsTitleEdit] = useState<boolean>(false);
@@ -31,12 +30,6 @@ const TaskLog = ({ taskData }: { taskData: any }) => {
   useEffect(() => {
     window.addEventListener("click", (e) => {
       const element = e.target as HTMLElement;
-      console.log(
-        element,
-        element.classList,
-        element.classList.contains("task-log__col-points-input"),
-        element.classList.contains("task-log__col-points")
-      );
       if (
         !element.classList.contains("task-log__col-points-input") &&
         !element.classList.contains("task-log__col-points")
@@ -56,7 +49,6 @@ const TaskLog = ({ taskData }: { taskData: any }) => {
     taskService
       .updateTask(updateTask?._id, updateTask)
       .then((response) => {
-        console.log(response);
         setTask(updateTask);
       })
       .catch(() => message.error("Internal Server Error"));
@@ -68,7 +60,6 @@ const TaskLog = ({ taskData }: { taskData: any }) => {
     taskService
       .updateTask(updateTask?._id, updateTask)
       .then((response) => {
-        console.log(response);
         setTask(updateTask);
         setIsStoryPoints(false);
       })
@@ -81,7 +72,6 @@ const TaskLog = ({ taskData }: { taskData: any }) => {
     taskService
       .updateTask(updateTask?._id, updateTask)
       .then((response) => {
-        console.log(response);
         setTask(updateTask);
         setIsStoryPoints(false);
       })
@@ -94,7 +84,6 @@ const TaskLog = ({ taskData }: { taskData: any }) => {
     taskService
       .updateTask(updateTask?._id, updateTask)
       .then((response) => {
-        console.log(response);
         setTask(updateTask);
         setIsTitleEdit(false);
       })
@@ -236,7 +225,7 @@ const TaskLog = ({ taskData }: { taskData: any }) => {
           />
         )}
       </Col>
-      <Col className="task-log__col" span={1}>
+      <Col className="task-log__col" span={2}>
         {task?.task_no}
       </Col>
       <Col className="task-log__col" flex={1}>

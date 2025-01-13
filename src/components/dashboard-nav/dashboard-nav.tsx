@@ -210,7 +210,6 @@ export const DashboardNav = () => {
         message.success("Project created successfully!");
       })
       .catch((err) => {
-        console.log("Project err ", err);
         loading();
         message.error("Project Creation Error!");
       });

@@ -15,6 +15,13 @@ export class TaskService {
     return await this.publicHttpService.post(`${this.namespace}`, taskData);
   };
 
+  filterTask = async (filterData: any) => {
+    return await this.publicHttpService.post(
+      `${this.namespace}/filter`,
+      filterData
+    );
+  };
+
   getSingleTask = async (task_id: string) => {
     return await this.publicHttpService.get(`${this.namespace}/${task_id}`);
   };

@@ -27,14 +27,6 @@ const DashboardBacklog = () => {
     refetchOnWindowFocus: false,
   });
 
-  useEffect(() => {
-    console.log("sprints ", sprints, selectedProject);
-
-    if (!sprints) {
-      console.log("NO Sprint");
-    }
-  }, [sprints]);
-
   return (
     <div>
       <Row gutter={10} style={{ marginBottom: "10px" }}>

@@ -13,10 +13,6 @@ const DashboardSidebar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(selectedProject);
-  }, [selectedProject]);
-
-  useEffect(() => {
     setActiveMenu(location.pathname);
   }, [location.pathname]);
 
